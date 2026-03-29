@@ -1,4 +1,5 @@
 import { model, Schema } from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const userSchema = new Schema({
     fullname : {
@@ -15,7 +16,8 @@ const userSchema = new Schema({
     email : {
         type: String,
         required: true,
-        trim: true
+        trim: true,
+        unique: true
     },
     password : {
         type: String,
@@ -33,6 +35,11 @@ const userSchema = new Schema({
     }
 }, { timestamps: true });
 
-const UserModel = model('User', userSchema);
+userSchema.pre('save', async function() {
+    if (this.isModified('password')) {
+        this.password = await bcrypt.hash(this.password.toString(), 10);
+    }
+});
 
+const UserModel = model('User', userSchema);
 export default UserModel;    
