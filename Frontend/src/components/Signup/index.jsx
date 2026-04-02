@@ -2,10 +2,25 @@ import { Card, Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined, PhoneOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import Homelayout from "../../layout/Homelayout.jsx";
+import axios from "axios";
+
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
 
 const { Item } = Form;
 
 const Signup = () => {
+
+  const onFinish = async (values) => {
+    try {
+      const signupRes = await axios.post("/api/user/signup", values);
+      await axios.post("/api/user/send-mail", { email: values.email });
+      console.log("User created successfully:", signupRes.data);
+    } catch (error) {
+      const message = error?.response?.data?.message || error.message;
+      console.error("Error occurred while signing up:", message);
+    }
+  };
+
   return (
     <Homelayout>
       <div className="flex">
@@ -21,7 +36,10 @@ const Signup = () => {
             <h2 className="font-bold text-[#FF735C] text-2xl text-center mb-6">
               Register To Track Your Expense
             </h2>
-            <Form layout="vertical" name="login-form">
+            <Form 
+            layout="vertical" 
+            name="login-form"
+            onFinish={onFinish}>
               <Item
                 label="Full Name"
                 name="fullname"

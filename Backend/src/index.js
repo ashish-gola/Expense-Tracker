@@ -5,14 +5,21 @@ import userRouter from './user/user.routes.js';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const app = express();
+
+const allowedOrigins = [process.env.PROD_DOMAIN?.trim(), 'http://localhost:5173'].filter(Boolean);
 
 // app level middleware
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(cors({
+    origin: allowedOrigins,
+    credentials: true
+}));
 
 app.get('/', (req, res) => {
     res.json({ message: 'Setup Successful' });
