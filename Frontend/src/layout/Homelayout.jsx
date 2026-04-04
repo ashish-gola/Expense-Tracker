@@ -4,21 +4,20 @@ import PropTypes from "prop-types";
 const { Header, Content, Footer } = Layout;
 
 const Homelayout = ({ children }) => {
-
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   return (
-    <Layout>   
+    <Layout>
       <Header className="bg-[#FF735C]! flex items-center justify-center px-4">
         <h1 className="text-white text-xl md:text-3xl font-bold text-center tracking-wide">
           Expense Tracker App
         </h1>
-      </Header> 
-      <Content 
+      </Header>
+      <Content
         style={{
-          margin: '20px 16px',
+          margin: "20px 16px",
           padding: 24,
           minHeight: 280,
           background: colorBgContainer,
@@ -33,7 +32,7 @@ const Homelayout = ({ children }) => {
         </h1>
       </Footer>
     </Layout>
-  );  
+  );
 };
 
 Homelayout.propTypes = {

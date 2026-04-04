@@ -4,11 +4,11 @@ import Login from "../Login/index.jsx";
 const Home = () => {
   return (
     <div>
-        <Homelayout>
-         <Login />
-        </Homelayout>
+      <Homelayout>
+        <Login />
+      </Homelayout>
     </div>
-    );
+  );
 };
 
 export default Home;

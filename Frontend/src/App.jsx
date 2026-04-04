@@ -1,5 +1,5 @@
 import Home from "./components/Home/index.jsx";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Signup from "./components/Signup/index.jsx";
 
 const App = () => {
@@ -9,7 +9,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/signup" element={<Signup />} />
       </Routes>
-    </BrowserRouter>  
+    </BrowserRouter>
   );
 };
 

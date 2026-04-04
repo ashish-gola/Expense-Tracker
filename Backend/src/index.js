@@ -1,28 +1,33 @@
-import express from 'express';
-import dotenv from 'dotenv';
+import express from "express";
+import dotenv from "dotenv";
 dotenv.config();
-import userRouter from './user/user.routes.js';
-import morgan from 'morgan';
-import mongoose from 'mongoose';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
+import userRouter from "./user/user.routes.js";
+import morgan from "morgan";
+import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express();
 
-const allowedOrigins = [process.env.PROD_DOMAIN?.trim(), 'http://localhost:5173'].filter(Boolean);
+const allowedOrigins = [
+  process.env.PROD_DOMAIN?.trim(),
+  "http://localhost:5173",
+].filter(Boolean);
 
 // app level middleware
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
+app.use(
+  cors({
     origin: allowedOrigins,
-    credentials: true
-}));
+    credentials: true,
+  }),
+);
 
-app.get('/', (req, res) => {
-    res.json({ message: 'Setup Successful' });
+app.get("/", (req, res) => {
+  res.json({ message: "Setup Successful" });
 });
 
 // routes level middleware
@@ -30,17 +35,17 @@ app.use("/api/user", userRouter);
 
 // Start server only after DB connects
 const startServer = async () => {
-    try {
-        await mongoose.connect(process.env.DB_URL);
-        console.log('Database connected successfully');
+  try {
+    await mongoose.connect(process.env.DB_URL);
+    console.log("Database connected successfully");
 
-        app.listen(3000, () => {
-            console.log('Server is running on port 3000');
-        });
-    } catch (err) {
-        console.error('Failed to connect to database:', err.message);
-        process.exit(1); // Exit so nodemon can restart cleanly
-    }
+    app.listen(3000, () => {
+      console.log("Server is running on port 3000");
+    });
+  } catch (err) {
+    console.error("Failed to connect to database:", err.message);
+    process.exit(1); // Exit so nodemon can restart cleanly
+  }
 };
 
 startServer();
