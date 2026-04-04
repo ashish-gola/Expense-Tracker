@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import sendMail from "../utils/mail.js";
 import otptemplate from "../utils/otptemplate.js";
+import { generateotp } from "../utils/generatesotp.js";
 
 export const createUser = async (req, res) => {
     try {
@@ -45,13 +46,20 @@ export const createUser = async (req, res) => {
 export const sendEmail = async (req, res) => {
     try {
         const { email } = req.body;
-        if (!email) return res.status(400).json({ message: "Email is required" });
+        const normalizedEmail = email?.toLowerCase().trim();
+        const OTP = String(generateotp());
+        if (!normalizedEmail) return res.status(400).json({ message: "Email is required" });
+
+        const existingUser = await User.findOne({ email: normalizedEmail });
+        if (existingUser) {
+            return res.status(409).json({ message: "User already exists with this email" });
+        }
 
         console.log("SENDER_EMAIL:", process.env.SENDER_EMAIL); // ✅ add this
         console.log("SENDER_PASSWORD exists:", !!process.env.SENDER_PASSWORD); // ✅ add this
 
-        await sendMail(email, "Your OTP Code", otptemplate());
-        res.status(200).json({ message: "Email sent successfully" });
+        await sendMail(normalizedEmail, "Your OTP Code", otptemplate(OTP));
+        res.status(200).json({ message: "Email sent successfully", otp: OTP, success: true });
     } catch (error) {
         console.error("EMAIL ERROR:", error); // ✅ add this
         res.status(500).json({ message: error.message });

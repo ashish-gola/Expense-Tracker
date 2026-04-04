@@ -1,5 +1,4 @@
-import { generateotp } from "./generatesotp.js";
-const otptemplate = () => {
+const otptemplate = (otp) => {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +30,7 @@ const otptemplate = () => {
               </p>
 
               <div style="font-size:32px; letter-spacing:8px; margin:25px 0; color:#007bff; font-weight:bold;">
-                ${generateotp()}
+                ${otp}
               </div>
 
               <p style="font-size:14px; color:#888;">
